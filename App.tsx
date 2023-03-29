@@ -28,7 +28,7 @@ const Tab = createBottomTabNavigator();
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const HomeScreen = ({navigation, route}) => {
+  const HomeScreen = ({navigation, route, greeting}) => {
     useEffect(() => {
       if (route.params?.post) {
         // Post updated, do something with `route.params.post`
@@ -36,6 +36,8 @@ function App(): JSX.Element {
         console.log('hey we got something: ', route.params?.post);
       }
     }, [route.params?.post]);
+
+    console.log(greeting);
 
     return (
       <View style={{flex: 1, backgroundColor: 'red', justifyContent: 'center'}}>
@@ -142,7 +144,6 @@ function App(): JSX.Element {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
           options={{
             title: 'My home',
             headerRight: () => (
@@ -152,7 +153,15 @@ function App(): JSX.Element {
                 // color="#fff"
               />
             ),
-          }}></Stack.Screen>
+          }}>
+          {props => (
+            <HomeScreen
+              {...props}
+              greeting={'Hello'}
+              extraData={{abc: 'def'}}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
