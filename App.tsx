@@ -8,32 +8,22 @@
 import React, {useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
   Button,
   Alert,
-  TouchableHighlight,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import SubCom from './SubCom';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -91,10 +81,41 @@ function App(): JSX.Element {
           title="Go to Jane's profile"
           onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
         />
+        <Button
+          title="Go to Tab Sample"
+          onPress={() => navigation.navigate('TabSample')}
+        />
+
+        <HOC>
+          <Text>THIS IS MY HOC</Text>
+        </HOC>
+        <SubCom></SubCom>
       </View>
     );
   };
+
+  const HOC = ({children}) => {
+    return <View style={{backgroundColor: 'yellow'}}>{children}</View>;
+  };
+
   const ProfileScreen = ({navigation, route}) => {
+    const [count, setCount] = React.useState(0);
+
+    useEffect(() => {
+      // Use `setOptions` to update the button that we previously specified
+      // Now the button includes an `onPress` handler to update the count
+      navigation.setOptions({
+        headerRight: () => (
+          <Button
+            onPress={() => {
+              console.log('ssdfsfs');
+            }}
+            title="Update count2"
+          />
+        ),
+      });
+    }, [navigation]);
+
     return (
       <View>
         <Text>This is {route.params?.name}'s profile</Text>
@@ -106,21 +127,78 @@ function App(): JSX.Element {
               params: {post: 'new data from profile screen'},
               merge: true,
             });
-            // navigation.navigate('Home', {
-            //   params: {post: 'new data from profile screen'},
-            //   merge: true,
-            // });
           }}
         />
       </View>
     );
   };
 
+  const TabSample = () => {
+    const commonBoxStyle = {
+      flexBasis: 70,
+      height: 80,
+    };
+
+    return (
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Feed"
+          component={() => {
+            return (
+              <View
+                style={{
+                  backgroundColor: 'orange',
+                  flex: 1,
+                  flexDirection: 'row',
+                  // flexWrap: 'wrap',
+                  // alignContent: 'space-around',
+                }}>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'blue'}]}></View>
+                <View style={[commonBoxStyle, {backgroundColor: 'red'}]}></View>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'pink'}]}></View>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'black'}]}></View>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'white'}]}></View>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'cyan'}]}></View>
+                <View
+                  style={[commonBoxStyle, {backgroundColor: 'brown'}]}></View>
+              </View>
+            );
+          }}
+        />
+        <Tab.Screen name="Messages" component={() => {}} />
+      </Tab.Navigator>
+    );
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-        <Stack.Screen name="Profile" component={ProfileScreen}></Stack.Screen>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: 'My home',
+            headerRight: () => (
+              <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                // color="#fff"
+              />
+            ),
+          }}></Stack.Screen>
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={({navigation, route}) => ({
+            // Add a placeholder button without the `onPress` to avoid flicker
+            // headerRight: () => <Button title="Update count" />,
+          })}></Stack.Screen>
+        <Stack.Screen name="TabSample" component={TabSample}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
