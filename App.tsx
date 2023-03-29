@@ -52,6 +52,15 @@ function App(): JSX.Element {
 
         <HOC>
           <Text>THIS IS MY HOC</Text>
+          <Button
+            title={'Goto Messages'}
+            onPress={() => {
+              navigation.navigate('TabSample', {
+                screen: 'Messages',
+                params: {user: 'jane'},
+              });
+            }}
+          />
         </HOC>
         <SubCom></SubCom>
       </View>
