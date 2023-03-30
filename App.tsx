@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {Text, useColorScheme, View, Button, Alert} from 'react-native';
 
@@ -22,6 +22,8 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const HomeScreen = ({navigation, route, greeting}) => {
+    const [data, setData] = useState([]);
+
     useEffect(() => {
       if (route.params?.post) {
         // Post updated, do something with `route.params.post`
@@ -29,6 +31,17 @@ function App(): JSX.Element {
         console.log('hey we got something: ', route.params?.post);
       }
     }, [route.params?.post]);
+
+    useEffect(() => {
+      fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(x => x.json())
+        .then(y => {
+          console.log(y);
+          if (y && y?.length > 0) {
+            setData(y);
+          }
+        });
+    }, []);
 
     console.log(greeting);
 
@@ -55,7 +68,7 @@ function App(): JSX.Element {
             }}
           />
         </HOC>
-        <SubCom></SubCom>
+        <SubCom data={data}></SubCom>
       </View>
     );
   };

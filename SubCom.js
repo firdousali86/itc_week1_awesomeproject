@@ -9,21 +9,22 @@ import {
   Pressable,
 } from 'react-native';
 
-const Item = ({title}) => (
-  <View style={{height: 80}}>
-    <Text style={{}}>{title}</Text>
-  </View>
-);
-
-const getItem = (_data, index) => ({
-  id: Math.random().toString(12).substring(0),
-  title: `Item ${index + 1}`,
-});
-
-const getItemCount = _data => 50;
-
-const SubCom = () => {
+const SubCom = props => {
   const [modalVisible, setModalVisible] = useState(true);
+
+  const Item = ({title}) => (
+    <View style={{height: 80}}>
+      <Text style={{}}>{title}</Text>
+    </View>
+  );
+
+  const getItem = (_data, index) => {
+    return _data[index];
+  };
+
+  const getItemCount = _data => {
+    return _data.length;
+  };
 
   return (
     <View>
@@ -34,6 +35,7 @@ const SubCom = () => {
         keyExtractor={item => item.id}
         getItemCount={getItemCount}
         getItem={getItem}
+        data={props?.data ? props.data : []}
       />
       <Modal
         animationType="slide"
