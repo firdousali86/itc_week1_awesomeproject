@@ -19,11 +19,11 @@ const SubCom = props => {
   );
 
   const getItem = (_data, index) => {
-    return _data[index];
+    return props.data[index];
   };
 
   const getItemCount = _data => {
-    return _data.length;
+    return props.data.length;
   };
 
   return (
@@ -35,7 +35,7 @@ const SubCom = props => {
         keyExtractor={item => item.id}
         getItemCount={getItemCount}
         getItem={getItem}
-        data={props?.data ? props.data : []}
+        // data={props?.data ? props.data : []}
       />
       <Modal
         animationType="slide"
