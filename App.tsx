@@ -7,7 +7,7 @@
 
 import React, {useEffect, useState} from 'react';
 import type {PropsWithChildren} from 'react';
-import {Text, useColorScheme, View, Button, Alert} from 'react-native';
+import {Text, useColorScheme, View, Button, Alert, LogBox} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {NavigationContainer} from '@react-navigation/native';
@@ -33,6 +33,8 @@ function App(): JSX.Element {
     }, [route.params?.post]);
 
     useEffect(() => {
+      // LogBox.ignoreAllLogs();
+
       fetch('https://jsonplaceholder.typicode.com/todos')
         .then(x => x.json())
         .then(y => {
